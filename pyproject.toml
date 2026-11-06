@@ -1,0 +1,56 @@
+[project]
+name = "license-mcp"
+version = "0.1.0"
+description = "MCP server that answers 'what licenses are my dependencies under, and can I ship this?' from your lockfiles and installed packages, mostly offline: SPDX normalisation, policy checks, compatibility guidance, third-party notices."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "0xmortuex" }]
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=2.0.0",
+    "tomli>=2.0; python_version < '3.11'",
+]
+keywords = ["mcp", "license", "spdx", "compliance", "sbom", "dependencies", "lockfile", "ai-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "anyio"]
+
+[project.urls]
+Homepage = "https://github.com/0xmortuex/license-mcp"
+
+[project.scripts]
+license-mcp = "license_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/license_mcp"]
+
+[tool.pytest.ini_options]
+markers = [
+    "network: talks to the real PyPI / npm / crates.io (excluded from default CI)",
+    "installs: installs real packages into a temp venv with uv (excluded from default CI)",
+]
+addopts = "-m 'not network and not installs'"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[dependency-groups]
+dev = [
+    "mypy==2.3.0",
+    "ruff==0.16.0",
+]
